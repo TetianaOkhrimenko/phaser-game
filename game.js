@@ -78,17 +78,20 @@ function create() {
 
   //this.physics.add.collider(player, platforms);
 
-  this.physics.add.collider(player, platforms, (player, platform) => {
-    platform.body.moves = true;
-    platform.body.checkCollision.none = true;
-  });
-
-  this.physics.add.collider(player, block);
-
   scoreText = this.add.text(20, 20, "Score: 0", {
     fontSize: "26px",
     fill: "#000",
   });
+
+  this.physics.add.collider(player, platforms, (player, platform) => {
+    platform.body.moves = true;
+    platform.body.checkCollision.none = true;
+
+    score += 1;
+    scoreText.setText("Score: " + score);
+  });
+
+  this.physics.add.collider(player, block);
 
   //this.physics.add.collider(player, platforms, (player, platform) => {
   //platform.body.moves = true;

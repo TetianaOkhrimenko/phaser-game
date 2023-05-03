@@ -37,6 +37,10 @@ let score = 0;
 let scoreText;
 
 function create() {
+  this.backgr = this.add
+    .tileSprite(256, 256, 512, 512, "background")
+    .setScrollFactor(0, 0);
+
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;
 
@@ -65,6 +69,7 @@ function create() {
   for (const platform of platforms.getChildren()) {
     platform.body.immovable = true;
     platform.body.moves = false;
+    platform.body.velocity.x = 100;
   }
 
   const block = this.physics.add.staticImage(400, 568, "block");
@@ -72,7 +77,8 @@ function create() {
   player = this.physics.add.sprite(400, 450, "doggo");
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
-  player.body.setGravityY(500);
+
+  player.body.setGravityY(300);
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -84,6 +90,7 @@ function create() {
   });
 
   this.physics.add.collider(player, platforms, (player, platform) => {
+    //player.body.checkWorldBounds();
     platform.body.moves = true;
     platform.body.checkCollision.none = true;
 
@@ -111,6 +118,7 @@ function update() {
   //  touchPlatform();
   //}
   const { scrollX, scrollY } = this.cameras.main;
+  this.backgr.setTilePosition(scrollX, scrollY);
 
   if (cursors.left.isDown) {
     player.setVelocityX(-150);

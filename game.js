@@ -57,9 +57,9 @@ function create() {
   platforms.create(600, 550);
   platforms.create(200, 500);
   //platforms.create(450, 440);
-  platforms.create(700, 420);
-  platforms.create(500, 350);
-  platforms.create(550, 250);
+  platforms.create(700, 480);
+  platforms.create(750, 400);
+  platforms.create(800, 320);
   platforms.create(600, 150);
 
   for (const platform of platforms.getChildren()) {
@@ -72,7 +72,7 @@ function create() {
   player = this.physics.add.sprite(400, 450, "doggo");
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
-  player.body.setGravityY(300);
+  player.body.setGravityY(500);
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -110,6 +110,7 @@ function update() {
   // if (this.physics.collider(this.player, this.platforms)) {
   //  touchPlatform();
   //}
+  const { scrollX, scrollY } = this.cameras.main;
 
   if (cursors.left.isDown) {
     player.setVelocityX(-150);

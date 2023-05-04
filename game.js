@@ -90,12 +90,14 @@ function create() {
   });
 
   this.physics.add.collider(player, platforms, (player, platform) => {
-    //player.body.checkWorldBounds();
-    platform.body.moves = true;
-    platform.body.checkCollision.none = true;
+    if (player.body.touching.down && platform.body.touching.up) {
+      platform.body.moves = true;
+      platform.body.checkCollision.none = true;
 
-    score += 1;
-    scoreText.setText("Score: " + score);
+      score += 1;
+      scoreText.setText("Score: " + score);
+    }
+    //player.body.checkWorldBounds();
   });
 
   this.physics.add.collider(player, block);
@@ -121,10 +123,10 @@ function update() {
   this.backgr.setTilePosition(scrollX, scrollY);
 
   if (cursors.left.isDown) {
-    player.setVelocityX(-150);
+    player.setVelocityX(-180);
     player.anims.play("left", true);
   } else if (cursors.right.isDown) {
-    player.setVelocityX(150);
+    player.setVelocityX(180);
     player.anims.play("right", true);
   } else {
     player.setVelocityX(0);

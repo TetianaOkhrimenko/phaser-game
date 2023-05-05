@@ -38,8 +38,9 @@ let scoreText;
 
 function create() {
   this.backgr = this.add
-    .tileSprite(256, 256, 512, 512, "background")
-    .setScrollFactor(0, 0);
+    .tileSprite(0, 0, 800, 600, "background")
+    .setOrigin(0, 1)
+    .setScrollFactor(0, 1);
 
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;
@@ -83,6 +84,8 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
 
+  //this.tileSprite.tilePositionX += 100;
+
   //this.physics.add.collider(player, platforms);
 
   scoreText = this.add.text(20, 20, "Score: 0", {
@@ -122,6 +125,8 @@ function update() {
   //}
   const { scrollX, scrollY } = this.cameras.main;
   this.backgr.setTilePosition(scrollX, scrollY);
+
+  //this.backgr.tilePositionX -= 100;
 
   if (cursors.left.isDown) {
     player.setVelocityX(-180);

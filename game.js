@@ -65,6 +65,7 @@ function create() {
   platforms.create(750, 400);
   platforms.create(800, 320);
   platforms.create(600, 150);
+  platforms.create(550, 250);
 
   for (const platform of platforms.getChildren()) {
     platform.body.immovable = true;
@@ -133,8 +134,9 @@ function update() {
     player.anims.play("turn");
   }
 
+  //if (cursors.up.isDown && player.body.touching.down)
   if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-350);
+    player.setVelocityY(-500);
   }
 
   //this.physics.arcade.collide(player, platforms, touchPlatform);

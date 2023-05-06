@@ -24,6 +24,7 @@ function preload() {
   //game.scale.pageAlignVertically = true;
   //game.stage.backgroundColor = "#bbe4e9";
 
+  // this.load.image("background", "assets/nebula.jpg");
   this.load.image("background", "assets/background.png");
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
@@ -40,7 +41,7 @@ function create() {
   this.backgr = this.add
     .tileSprite(0, 0, 800, 600, "background")
     .setOrigin(0, 1)
-    .setScrollFactor(0, 1);
+    .setScrollFactor(1);
 
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;
@@ -84,7 +85,7 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
 
-  //this.tileSprite.tilePositionX += 100;
+  //this.backgr.tilePositionY += 100;
 
   //this.physics.add.collider(player, platforms);
 
@@ -123,10 +124,11 @@ function update() {
   // if (this.physics.collider(this.player, this.platforms)) {
   //  touchPlatform();
   //}
-  const { scrollX, scrollY } = this.cameras.main;
+  //const { scrollX, scrollY } = this.cameras.main;
+  const cam = this.cameras.main;
   this.backgr.setTilePosition(scrollX, scrollY);
-
-  //this.backgr.tilePositionX -= 100;
+  //this.backgr.setTilePosition(this.cameras.main.scrollY);
+  //this.backgr.tilePositionY -= 100;
 
   if (cursors.left.isDown) {
     player.setVelocityX(-180);
@@ -139,8 +141,16 @@ function update() {
     player.anims.play("turn");
   }
 
-  //if (cursors.up.isDown && player.body.touching.down)
+  if (cursors.up.isDown) {
+    cam.scrollY -= 1;
+  }
+
+  //else if (cursors.down.isDown) {
+  //  cam.scrollY += 1;
+  //}
+
   if (cursors.up.isDown && player.body.touching.down) {
+    //if (cursors.up.isDown && player.body.touching.down)
     player.setVelocityY(-500);
   }
 

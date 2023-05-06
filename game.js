@@ -24,7 +24,7 @@ function preload() {
   //game.scale.pageAlignVertically = true;
   //game.stage.backgroundColor = "#bbe4e9";
 
-  // this.load.image("background", "assets/nebula.jpg");
+  //this.load.image("background", "assets/space.jpg");
   this.load.image("background", "assets/background.png");
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
@@ -60,9 +60,13 @@ function create() {
   //});
 
   //platforms.create(400, 568);
+
+  /*for (let i = 0; i < 10; i++) {
+    platforms.create(Math.random() * 1000, Math.random() * 1000);
+  }*/
+
   platforms.create(600, 550);
   platforms.create(200, 500);
-  //platforms.create(450, 440);
   platforms.create(700, 480);
   platforms.create(750, 400);
   platforms.create(800, 320);

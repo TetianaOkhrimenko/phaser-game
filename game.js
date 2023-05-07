@@ -38,10 +38,17 @@ let score = 0;
 let scoreText;
 
 function create() {
-  this.backgr = this.add
+  for (let i = 1; i < 10; i++) {
+    this.backgr = this.add
+      .tileSprite(0, 0, 800, 600 * i, "background")
+      .setOrigin(0, 1)
+      .setScrollFactor(1);
+  }
+
+  /*this.backgr = this.add
     .tileSprite(0, 0, 800, 600, "background")
     .setOrigin(0, 1)
-    .setScrollFactor(1);
+    .setScrollFactor(1);*/
 
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;

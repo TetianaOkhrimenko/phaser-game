@@ -105,6 +105,8 @@ function create() {
     fill: "#000",
   });
 
+  //scoreText.fixedToCamera = true;
+
   this.physics.add.collider(player, platforms, (player, platform) => {
     if (player.body.touching.down && platform.body.touching.up) {
       platform.body.moves = true;

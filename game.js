@@ -68,17 +68,20 @@ function create() {
 
   //platforms.create(400, 568);
 
-  /*for (let i = 0; i < 10; i++) {
-    platforms.create(Math.random() * 1000, Math.random() * 1000);
-  }*/
+  for (let i = 0; i < 10; i++) {
+    platforms.create(
+      Phaser.Math.RND.between(0, 800),
+      Phaser.Math.RND.between(0, 600)
+    );
+  }
 
-  platforms.create(600, 550);
+  /*platforms.create(600, 550);
   platforms.create(200, 500);
   platforms.create(700, 480);
   platforms.create(750, 400);
   platforms.create(800, 320);
   platforms.create(600, 150);
-  platforms.create(550, 250);
+  platforms.create(550, 250);*/
 
   for (const platform of platforms.getChildren()) {
     platform.body.immovable = true;

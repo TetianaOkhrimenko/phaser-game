@@ -24,8 +24,8 @@ function preload() {
   //game.scale.pageAlignVertically = true;
   //game.stage.backgroundColor = "#bbe4e9";
 
-  //this.load.image("background", "assets/space.jpg");
-  this.load.image("background", "assets/background.png");
+  this.load.image("background", "assets/nebula.jpg");
+  //this.load.image("background", "assets/background.png");
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
   this.load.image("doggo", "assets/orange-cat1.png", {
@@ -105,7 +105,7 @@ function create() {
 
   scoreText = this.add.text(20, 20, "Score: 0", {
     fontSize: "26px",
-    fill: "#000",
+    fill: "#eee", //#000
   });
 
   //scoreText.fixedToCamera = true;

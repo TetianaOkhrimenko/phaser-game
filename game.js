@@ -50,10 +50,20 @@ function create() {
     .setOrigin(0, 1)
     .setScrollFactor(1);*/
 
+  this.w = this.cameras.main.width;
+  this.h = this.cameras.main.height;
+  console.log(this.w, this.h);
+
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;
 
-  this.add.image(400, 300, "background");
+  //this.add.image(400, 300, "background");
+
+  //let bg = this.add.image(400, 300, "background");
+  let bg = this.add.image(this.w / 2, this.h / 2, "background");
+
+  //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
+  this.cameras.main.setBounds(0, 0, 600, 800);
 
   //platforms = this.physics.add.staticGroup();
   platforms = this.physics.add.group({
@@ -66,13 +76,17 @@ function create() {
   //setXY: { x: 5, y: 200, stepX: 100 },
   //});
 
-  //platforms.create(400, 568);
-
-  for (let i = 0; i < 10; i++) {
+  /*for (let i = 0; i < 10; i++) {
     platforms.create(
       Phaser.Math.RND.between(0, 800),
       Phaser.Math.RND.between(0, 600)
     );
+  }*/
+
+  let center = this.w / 2;
+  console.log(center);
+  for (let i = 1; i < 10; i++) {
+    platforms.create(i * 100 + 100, i * 100 + 200);
   }
 
   /*platforms.create(600, 550);
@@ -89,13 +103,21 @@ function create() {
     platform.body.velocity.x = 100;
   }
 
-  const block = this.physics.add.staticImage(400, 568, "block");
+  //const block = this.physics.add.staticImage(400, 568, "block");
 
-  player = this.physics.add.sprite(400, 450, "doggo");
+  const block = this.physics.add
+    .staticImage(this.w / 2, this.h + 100, "block")
+    .setScale(1.2);
+
+  //player = this.physics.add.sprite(400, 450, "doggo");
+  player = this.physics.add.sprite(this.w / 2, this.h - 50, "doggo");
+
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
 
   player.body.setGravityY(300);
+
+  this.cameras.main.startFollow(player);
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -103,10 +125,14 @@ function create() {
 
   //this.physics.add.collider(player, platforms);
 
-  scoreText = this.add.text(20, 20, "Score: 0", {
+  scoreText = this.add.text(this.w / 2 + 250, 20, "Score: 0", {
     fontSize: "26px",
     fill: "#eee", //#000
   });
+
+  hud = this.add.container(0, 0, [scoreText]);
+  //lock it to the camera
+  hud.setScrollFactor(0);
 
   //scoreText.fixedToCamera = true;
 
@@ -117,6 +143,7 @@ function create() {
 
       score += 1;
       scoreText.setText("Score: " + score);
+      //scoreText.fixedToCamera = true;
     }
     //player.body.checkWorldBounds();
   });
@@ -157,9 +184,9 @@ function update() {
     player.anims.play("turn");
   }
 
-  if (cursors.up.isDown) {
+  /*if (cursors.up.isDown) {
     cam.scrollY -= 1;
-  }
+  }*/
 
   //else if (cursors.down.isDown) {
   //  cam.scrollY += 1;

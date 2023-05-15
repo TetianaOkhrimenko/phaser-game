@@ -38,9 +38,13 @@ let score = 0;
 let scoreText;
 
 function create() {
+  this.w = this.cameras.main.width;
+  this.h = this.cameras.main.height;
+  console.log(this.w, this.h);
+
   for (let i = 1; i < 10; i++) {
     this.backgr = this.add
-      .tileSprite(0, 0, 800, 600 * i, "background")
+      .tileSprite(0, 0, this.w, this.h * i, "background")
       .setOrigin(0, 1)
       .setScrollFactor(1);
   }
@@ -49,10 +53,6 @@ function create() {
     .tileSprite(0, 0, 800, 600, "background")
     .setOrigin(0, 1)
     .setScrollFactor(1);*/
-
-  this.w = this.cameras.main.width;
-  this.h = this.cameras.main.height;
-  console.log(this.w, this.h);
 
   this.physics.world.checkCollision.up = false;
   this.physics.world.checkCollision.down = false;
@@ -64,6 +64,7 @@ function create() {
 
   //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
   this.cameras.main.setBounds(0, 0, 600, 800);
+  //this.cameras.main.setBounds(0, 0, this.w, this.h * 5);
 
   //platforms = this.physics.add.staticGroup();
   platforms = this.physics.add.group({
@@ -85,8 +86,9 @@ function create() {
 
   let center = this.w / 2;
   console.log(center);
-  for (let i = 1; i < 10; i++) {
-    platforms.create(i * 100 + 100, i * 100 + 200);
+  for (let i = 1; i < 20; i++) {
+    platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+    //platforms.create(i * 100 + 100, i * 100 + 200);
   }
 
   /*platforms.create(600, 550);
@@ -117,7 +119,9 @@ function create() {
 
   player.body.setGravityY(300);
 
-  this.cameras.main.startFollow(player);
+  this.cameras.main.startFollow(player, true, 0, 0.05, -200, 120);
+
+  //this.cameras.main.startFollow(player);
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -192,7 +196,7 @@ function update() {
   //  cam.scrollY += 1;
   //}
 
-  if (cursors.up.isDown && player.body.touching.down) {
+  if (cursors.up.isDown) {
     //if (cursors.up.isDown && player.body.touching.down)
     player.setVelocityY(-500);
   }

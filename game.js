@@ -63,8 +63,9 @@ function create() {
   let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
   //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
-  this.cameras.main.setBounds(0, 0, 600, 800);
-  //this.cameras.main.setBounds(0, 0, this.w, this.h * 5);
+  this.cameras.main.setBounds(0, 0, 800, 800);
+
+  //this.cameras.main.setBounds(0, 0, this.w, this.h *2);
 
   //platforms = this.physics.add.staticGroup();
   platforms = this.physics.add.group({
@@ -173,9 +174,10 @@ function update() {
   //}
   //const { scrollX, scrollY } = this.cameras.main;
   const cam = this.cameras.main;
-  this.backgr.setTilePosition(scrollX, scrollY);
+
+  //this.backgr.setTilePosition(scrollX, scrollY);
   //this.backgr.setTilePosition(this.cameras.main.scrollY);
-  //this.backgr.tilePositionY -= 100;
+  //this.backgr.tilePositionY -= 1;
 
   if (cursors.left.isDown) {
     player.setVelocityX(-180);

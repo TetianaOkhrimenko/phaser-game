@@ -42,11 +42,17 @@ function create() {
   this.h = this.cameras.main.height;
   console.log(this.w, this.h);
 
+  /*let bg = this.add.image(this.w / 2, this.h / 2, "background");
+
   for (let i = 1; i < 10; i++) {
     this.backgr = this.add
       .tileSprite(0, 0, this.w, this.h * i, "background")
       .setOrigin(0, 1)
       .setScrollFactor(1);
+  }*/
+
+  for (let i = 1; i < 10; i++) {
+    let tileBg = this.add.tileSprite(400, 300, 800, 600 * i, "background");
   }
 
   /*this.backgr = this.add
@@ -60,7 +66,7 @@ function create() {
   //this.add.image(400, 300, "background");
 
   //let bg = this.add.image(400, 300, "background");
-  let bg = this.add.image(this.w / 2, this.h / 2, "background");
+  // let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
   //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
   this.cameras.main.setBounds(0, 0, 800, 800);
@@ -120,7 +126,8 @@ function create() {
 
   player.body.setGravityY(300);
 
-  this.cameras.main.startFollow(player, true, 0, 0.05, -200, 120);
+  //this.cameras.main.startFollow(player, true, 0, 0.05, -200, 120);
+  this.cameras.main.startFollow(player, true, 0, 0.05, 0, 0);
 
   //this.cameras.main.startFollow(player);
 

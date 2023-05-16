@@ -70,6 +70,7 @@ function create() {
 
   //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
   this.cameras.main.setBounds(0, 0, 800, 800);
+
   //this.physics.world.setBounds(0, 0, 800, 800);
 
   //this.cameras.main.setBounds(0, 0, this.w, this.h *2);

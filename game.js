@@ -42,6 +42,8 @@ function create() {
   this.h = this.cameras.main.height;
   console.log(this.w, this.h);
 
+  const worldHeight = 3000;
+
   /*let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
   for (let i = 1; i < 10; i++) {
@@ -52,7 +54,13 @@ function create() {
   }*/
 
   for (let i = 1; i < 10; i++) {
-    let tileBg = this.add.tileSprite(400, 300, 800, 600 * i, "background");
+    let tileBg = this.add.tileSprite(
+      400,
+      worldHeight + 300,
+      800,
+      600 * i,
+      "background"
+    );
   }
 
   /*this.backgr = this.add
@@ -69,16 +77,24 @@ function create() {
   // let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
   //this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
-  this.cameras.main.setBounds(0, 0, 800, 800);
 
-  //this.physics.world.setBounds(0, 0, 800, 800);
+  this.cameras.main.setBounds(0, 0, 800, worldHeight);
+  this.physics.world.setBounds(0, 0, 800, worldHeight);
 
   //this.cameras.main.setBounds(0, 0, this.w, this.h *2);
 
-  //platforms = this.physics.add.staticGroup();
   platforms = this.physics.add.group({
     defaultKey: "ground",
   });
+
+  /* platforms = this.physics.add.group({
+    key: "ground",
+    frameQuantity: 20,
+    setXY: { x: 200, y: 150, stepY: 150, stepX: 150 },
+    velocityX: 100,
+    immovable: true,
+    moves: false,
+  });*/
 
   //platforms = this.physics.add.staticGroup({
   // key: "platforms",
@@ -95,10 +111,17 @@ function create() {
 
   let center = this.w / 2;
   console.log(center);
+
   for (let i = 1; i < 20; i++) {
-    platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+    //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+    platforms.create(
+      Phaser.Math.RND.between(0, this.w - 50),
+      worldHeight - 100 * i
+    );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
+
+  // platforms.createMultiple();
 
   /*platforms.create(600, 550);
   platforms.create(200, 500);
@@ -117,11 +140,13 @@ function create() {
   //const block = this.physics.add.staticImage(400, 568, "block");
 
   const block = this.physics.add
-    .staticImage(this.w / 2, this.h + 100, "block")
+    //.staticImage(this.w / 2, this.h + 100, "block")
+    .staticImage(this.w / 2, worldHeight, "block")
     .setScale(1.2);
 
   //player = this.physics.add.sprite(400, 450, "doggo");
-  player = this.physics.add.sprite(this.w / 2, this.h - 50, "doggo");
+  //player = this.physics.add.sprite(this.w / 2, this.h - 50, "doggo");
+  player = this.physics.add.sprite(this.w / 2, worldHeight - 50, "doggo");
 
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);

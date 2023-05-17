@@ -141,12 +141,12 @@ function create() {
 
   const block = this.physics.add
     //.staticImage(this.w / 2, this.h + 100, "block")
-    .staticImage(this.w / 2, worldHeight, "block")
+    .staticImage(this.w / 2, worldHeight - 30, "block")
     .setScale(1.2);
 
   //player = this.physics.add.sprite(400, 450, "doggo");
   //player = this.physics.add.sprite(this.w / 2, this.h - 50, "doggo");
-  player = this.physics.add.sprite(this.w / 2, worldHeight - 50, "doggo");
+  player = this.physics.add.sprite(this.w / 2, worldHeight - 100, "doggo");
 
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);

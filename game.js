@@ -112,11 +112,11 @@ function create() {
   let center = this.w / 2;
   console.log(center);
 
-  for (let i = 1; i < 20; i++) {
+  for (let i = 1; i < 25; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
-      Phaser.Math.RND.between(0, this.w - 50),
-      worldHeight - 100 * i
+      Phaser.Math.RND.between(20, this.w - 30 * i),
+      worldHeight - 90 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
@@ -177,11 +177,12 @@ function create() {
 
   this.physics.add.collider(player, platforms, (player, platform) => {
     if (player.body.touching.down && platform.body.touching.up) {
-      platform.body.moves = true;
-      platform.body.checkCollision.none = true;
-
       score += 1;
       scoreText.setText("Score: " + score);
+
+      //platform.body.moves = true;
+      // platform.body.checkCollision.none = true;
+
       //scoreText.fixedToCamera = true;
     }
     //player.body.checkWorldBounds();
@@ -232,10 +233,10 @@ function update() {
   //  cam.scrollY += 1;
   //}
 
-  if (cursors.up.isDown) {
+  if (cursors.up.isDown && player.body.touching.down) {
     //if (cursors.up.isDown && player.body.touching.down)
     player.setVelocityY(-500);
   }
 
-  //this.physics.arcade.collide(player, platforms, touchPlatform);
+  //this.physics.add.collider(player, platforms, touchPlatform, null, this);
 }

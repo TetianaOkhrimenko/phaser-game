@@ -28,6 +28,7 @@ function preload() {
   //this.load.image("background", "assets/background.png");
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
+  this.load.image("platform", "assets/platform5.png");
   this.load.image("doggo", "assets/orange-cat1.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -87,6 +88,10 @@ function create() {
     defaultKey: "ground",
   });
 
+  movingPlatforms = this.physics.add.group({
+    defaultKey: "platform",
+  });
+
   /* platforms = this.physics.add.group({
     key: "ground",
     frameQuantity: 20,
@@ -115,8 +120,17 @@ function create() {
   for (let i = 1; i < 25; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
-      Phaser.Math.RND.between(20, this.w - 30 * i),
+      Phaser.Math.RND.between(20, this.w - 20 * i),
       worldHeight - 90 * i
+    );
+    //platforms.create(i * 100 + 100, i * 100 + 200);
+  }
+
+  for (let i = 1; i < 5; i++) {
+    //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+    movingPlatforms.create(
+      Phaser.Math.RND.between(20, this.w - 20),
+      worldHeight - 100 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
@@ -135,6 +149,17 @@ function create() {
     platform.body.immovable = true;
     platform.body.moves = false;
     platform.body.velocity.x = 100;
+  }
+
+  for (const platform of movingPlatforms.getChildren()) {
+    platform.body.immovable = true;
+    //platform.body.moves = false;
+
+    platform.setVelocity(-100, 0);
+    platform.body.allowGravity = false;
+    platform.setFriction(0, 1);
+
+    // platform.setScale(0.25);
   }
 
   //const block = this.physics.add.staticImage(400, 568, "block");
@@ -181,7 +206,24 @@ function create() {
       scoreText.setText("Score: " + score);
 
       //platform.body.moves = true;
-      // platform.body.checkCollision.none = true;
+      //platform.body.checkCollision.none = true;
+
+      //scoreText.fixedToCamera = true;
+    }
+    //player.body.checkWorldBounds();
+  });
+
+  this.physics.add.collider(player, movingPlatforms, (player, platform) => {
+    if (player.body.touching.down && platform.body.touching.up) {
+      score += 1;
+      scoreText.setText("Score: " + score);
+
+      player.setVelocity(-100, 0);
+
+      player.body.immovable = true;
+
+      //platform.body.moves = true;
+      //platform.body.checkCollision.none = true;
 
       //scoreText.fixedToCamera = true;
     }
@@ -189,6 +231,8 @@ function create() {
   });
 
   this.physics.add.collider(player, block);
+
+  this.physics.add.collider(platforms, movingPlatforms);
 
   //this.physics.add.collider(player, platforms, (player, platform) => {
   //platform.body.moves = true;

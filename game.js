@@ -126,10 +126,10 @@ function create() {
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
 
-  for (let i = 1; i < 5; i++) {
+  for (let i = 1; i < 10; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     movingPlatforms.create(
-      Phaser.Math.RND.between(20, this.w - 20),
+      Phaser.Math.RND.between(20, this.w - 100),
       worldHeight - 150 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
@@ -162,7 +162,7 @@ function create() {
     platform.maxDistance = 200;
     platform.previousX = platform.x;
     platform.setOrigin(0.5, 0.5);
-    platform.setCollideWorldBounds(true);
+    // platform.setCollideWorldBounds(true);
 
     // platform.setScale(0.25);
 

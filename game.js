@@ -120,7 +120,7 @@ function create() {
   for (let i = 1; i < 25; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
-      Phaser.Math.RND.between(20, this.w - 20 * i),
+      Phaser.Math.RND.between(20 + 20 * i, this.w - 20),
       worldHeight - 90 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
@@ -159,20 +159,31 @@ function create() {
     platform.body.allowGravity = false;
     platform.setFriction(0, 1);
 
+    platform.maxDistance = 200;
+    platform.previousX = platform.x;
+    platform.setOrigin(0.5, 0.5);
+    platform.setCollideWorldBounds(true);
+
     // platform.setScale(0.25);
+
+    /*if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
+      switchDirection(platform);
+    }*/
   }
 
-  movingPlatforms.children.iterate((child) => {
+  /* movingPlatforms.children.iterate((child) => {
     this.tweens.add({
       targets: child,
+      //value: { from: 0, to: 100 },
+      //value2: { from: 10, to: 200 },
       x: 200,
-      ease: "sine.in",
-      duration: 4000,
+      ease: "sine.inOut",
+      duration: 2000,
       delay: 2000,
       repeat: -1,
       yoyo: true,
     });
-  });
+  });*/
   //const block = this.physics.add.staticImage(400, 568, "block");
 
   const block = this.physics.add
@@ -228,10 +239,8 @@ function create() {
     if (player.body.touching.down && platform.body.touching.up) {
       score += 1;
       scoreText.setText("Score: " + score);
-
       player.setVelocity(-100, 0);
-
-      player.body.immovable = true;
+      //player.body.immovable = true;
     }
 
     //platform.body.moves = true;
@@ -295,4 +304,18 @@ function update() {
   }
 
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);
+
+  movingPlatforms.getChildren().forEach(function (platform) {
+    //check if it's time for them to turn around
+    if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
+      switchDirection(platform);
+    }
+  }, this);
+}
+
+function switchDirection(platform) {
+  //reverse velocity so baddie moves are same speed but in opposite direction
+  platform.body.velocity.x *= -1;
+  //reset count
+  platform.previousX = platform.x;
 }

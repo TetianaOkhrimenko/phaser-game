@@ -130,7 +130,7 @@ function create() {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     movingPlatforms.create(
       Phaser.Math.RND.between(20, this.w - 20),
-      worldHeight - 100 * i
+      worldHeight - 150 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
@@ -162,6 +162,17 @@ function create() {
     // platform.setScale(0.25);
   }
 
+  movingPlatforms.children.iterate((child) => {
+    this.tweens.add({
+      targets: child,
+      x: 200,
+      ease: "sine.in",
+      duration: 4000,
+      delay: 2000,
+      repeat: -1,
+      yoyo: true,
+    });
+  });
   //const block = this.physics.add.staticImage(400, 568, "block");
 
   const block = this.physics.add
@@ -221,12 +232,13 @@ function create() {
       player.setVelocity(-100, 0);
 
       player.body.immovable = true;
-
-      //platform.body.moves = true;
-      //platform.body.checkCollision.none = true;
-
-      //scoreText.fixedToCamera = true;
     }
+
+    //platform.body.moves = true;
+    //platform.body.checkCollision.none = true;
+
+    //scoreText.fixedToCamera = true;
+
     //player.body.checkWorldBounds();
   });
 

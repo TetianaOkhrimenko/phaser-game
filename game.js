@@ -44,6 +44,7 @@ function create() {
   console.log(this.w, this.h);
 
   const worldHeight = 3000;
+  this.cameraYMin = 3000;
 
   /*let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
@@ -155,7 +156,7 @@ function create() {
     platform.body.immovable = true;
     //platform.body.moves = false;
 
-    platform.setVelocity(-100, 0);
+    platform.setVelocity(100, 0);
     platform.body.allowGravity = false;
     platform.setFriction(0, 1);
 
@@ -189,7 +190,8 @@ function create() {
   const block = this.physics.add
     //.staticImage(this.w / 2, this.h + 100, "block")
     .staticImage(this.w / 2, worldHeight - 30, "block")
-    .setScale(1.2);
+    .setScale(1.2)
+    .refreshBody();
 
   //player = this.physics.add.sprite(400, 450, "doggo");
   //player = this.physics.add.sprite(this.w / 2, this.h - 50, "doggo");
@@ -199,6 +201,7 @@ function create() {
   player.setCollideWorldBounds(true);
 
   player.body.setGravityY(300);
+  player.previousY = player.y;
 
   //this.cameras.main.startFollow(player, true, 0, 0.05, -200, 120);
   this.cameras.main.startFollow(player, true, 0, 0.05, 0, 0);
@@ -275,6 +278,12 @@ function update() {
   //const { scrollX, scrollY } = this.cameras.main;
   const cam = this.cameras.main;
 
+  this.cameraYMin = Math.min(this.cameraYMin, player.y - this.h + 130);
+  console.log(this.cameraYMin);
+  console.log(player.y);
+  this.cameras.y = this.cameraYMin;
+  console.log(this.cameras.y);
+
   //this.backgr.setTilePosition(scrollX, scrollY);
   //this.backgr.setTilePosition(this.cameras.main.scrollY);
   //this.backgr.tilePositionY -= 1;
@@ -290,6 +299,18 @@ function update() {
     player.anims.play("turn");
   }
 
+  if (cursors.up.isDown) {
+    if (player.body.blocked.left) {
+      player.setVelocity(180, -300);
+      player.anims.play("right", true);
+    } else if (player.body.blocked.right) {
+      player.setVelocity(-180, -300);
+      player.anims.play("left", true);
+    } else if (player.body.touching.down) {
+      player.setVelocityY(-300);
+    }
+  }
+
   /*if (cursors.up.isDown) {
     cam.scrollY -= 1;
   }*/
@@ -303,12 +324,31 @@ function update() {
     player.setVelocityY(-500);
   }
 
+  //(player.body.velocity.y
+  //this.scene.start();
+
+  //if (player.previousY > player.y && !cursors.up.isDown) {
+  //  this.scene.start();
+  //}
+
+  //if (player.y > this.cameraYMin + this.h && player.alive) {
+  if (player.y > this.cameraYMin + this.h + 300) {
+    this.scene.start();
+  }
+
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);
 
   movingPlatforms.getChildren().forEach(function (platform) {
     //check if it's time for them to turn around
-    if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
+
+    /* if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
       switchDirection(platform);
+    }*/
+
+    if (platform.x >= 600) {
+      platform.setVelocityX(-100);
+    } else if (platform.x <= 100) {
+      platform.setVelocityX(100);
     }
   }, this);
 }

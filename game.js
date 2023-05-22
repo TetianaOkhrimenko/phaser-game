@@ -43,8 +43,9 @@ function create() {
   this.h = this.cameras.main.height;
   console.log(this.w, this.h);
 
-  const worldHeight = 3000;
-  this.cameraYMin = 3000;
+  const worldHeight = 99999;
+  this.cameraYMin = 99999;
+  this.platformYMin = 99999;
 
   /*let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
@@ -55,7 +56,19 @@ function create() {
       .setScrollFactor(1);
   }*/
 
-  for (let i = 1; i < 10; i++) {
+  const container = this.add.container(this.w, worldHeight);
+  const ts = this.add.tileSprite(
+    -(this.w / 2),
+    0,
+    this.w,
+    worldHeight,
+    "background"
+  );
+  container.add(ts);
+
+  const mainContainer = this.add.container(this.w, this.h);
+
+  /* for (let i = 1; i < 10; i++) {
     let tileBg = this.add.tileSprite(
       400,
       worldHeight + 300,
@@ -63,7 +76,7 @@ function create() {
       600 * i,
       "background"
     );
-  }
+  }*/
 
   /*this.backgr = this.add
     .tileSprite(0, 0, 800, 600, "background")
@@ -126,6 +139,8 @@ function create() {
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
+
+  // platform basic setup
 
   for (let i = 1; i < 10; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
@@ -279,10 +294,10 @@ function update() {
   const cam = this.cameras.main;
 
   this.cameraYMin = Math.min(this.cameraYMin, player.y - this.h + 130);
-  console.log(this.cameraYMin);
-  console.log(player.y);
+  console.log("cameraYMin:", this.cameraYMin);
+  console.log("player.y:", player.y);
   this.cameras.y = this.cameraYMin;
-  console.log(this.cameras.y);
+  console.log("cameras.y:", this.cameras.y);
 
   //this.backgr.setTilePosition(scrollX, scrollY);
   //this.backgr.setTilePosition(this.cameras.main.scrollY);
@@ -299,7 +314,7 @@ function update() {
     player.anims.play("turn");
   }
 
-  if (cursors.up.isDown) {
+  /*if (cursors.up.isDown) {
     if (player.body.blocked.left) {
       player.setVelocity(180, -300);
       player.anims.play("right", true);
@@ -309,7 +324,7 @@ function update() {
     } else if (player.body.touching.down) {
       player.setVelocityY(-300);
     }
-  }
+  }*/
 
   /*if (cursors.up.isDown) {
     cam.scrollY -= 1;
@@ -332,7 +347,12 @@ function update() {
   //}
 
   //if (player.y > this.cameraYMin + this.h && player.alive) {
-  if (player.y > this.cameraYMin + this.h + 300) {
+
+  // if (player.y > this.cameraYMin + this.h + 300) {
+  if (
+    player.y > this.cameraYMin + 2 * this.h ||
+    player.y == this.worldHeight - 100
+  ) {
     this.scene.start();
   }
 
@@ -349,6 +369,20 @@ function update() {
       platform.setVelocityX(-100);
     } else if (platform.x <= 100) {
       platform.setVelocityX(100);
+    }
+  }, this);
+
+  platforms.getChildren().forEach(function (platform) {
+    this.platformYMin = Math.min(this.platformYMin, platform.y);
+    if (platform.y > this.cameras.y + this.h + 300) {
+      platform.destroy();
+    }
+  }, this);
+
+  movingPlatforms.getChildren().forEach(function (platform) {
+    this.platformYMin = Math.min(this.platformYMin, platform.y);
+    if (platform.y > this.cameras.y + this.h + 300) {
+      platform.destroy();
     }
   }, this);
 }

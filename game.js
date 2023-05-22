@@ -29,10 +29,7 @@ function preload() {
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
   this.load.image("platform", "assets/platform5.png");
-  this.load.image("doggo", "assets/orange-cat1.png", {
-    frameWidth: 32,
-    frameHeight: 48,
-  });
+  this.load.image("doggo", "assets/orange-cat1.png");
 }
 
 let score = 0;
@@ -349,10 +346,7 @@ function update() {
   //if (player.y > this.cameraYMin + this.h && player.alive) {
 
   // if (player.y > this.cameraYMin + this.h + 300) {
-  if (
-    player.y > this.cameraYMin + 2 * this.h ||
-    player.y == this.worldHeight - 100
-  ) {
+  if (player.y > this.cameraYMin + 2 * this.h) {
     this.scene.start();
   }
 

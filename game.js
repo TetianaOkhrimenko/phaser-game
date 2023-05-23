@@ -64,7 +64,7 @@ function create() {
   );
   container.add(ts);
 
-  const mainContainer = this.add.container(this.w, this.h);
+  const screenContainer = this.add.container(this.w, this.h);
 
   /* for (let i = 1; i < 10; i++) {
     let tileBg = this.add.tileSprite(
@@ -129,18 +129,22 @@ function create() {
   let center = this.w / 2;
   console.log(center);
 
-  for (let i = 1; i < 25; i++) {
+  //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+
+  //platforms.create(i * 100 + 100, i * 100 + 200);
+
+  for (let i = 1; i < 50; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
-      Phaser.Math.RND.between(20 + 20 * i, this.w - 20),
-      worldHeight - 90 * i
+      Phaser.Math.RND.between(20, this.w - 20),
+      this.cameraYMin - 90 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
 
   // platform basic setup
 
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i < 30; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     movingPlatforms.create(
       Phaser.Math.RND.between(20, this.w - 100),
@@ -251,12 +255,10 @@ function create() {
     if (player.body.touching.down && platform.body.touching.up) {
       score += 1;
       scoreText.setText("Score: " + score);
-
-      //platform.body.moves = true;
-      //platform.body.checkCollision.none = true;
-
-      //scoreText.fixedToCamera = true;
     }
+    //platform.body.moves = true;
+    //platform.body.checkCollision.none = true;
+    //scoreText.fixedToCamera = true;
     //player.body.checkWorldBounds();
   });
 

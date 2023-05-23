@@ -353,17 +353,20 @@ function update() {
   //  this.scene.start();
   //}
 
+  if (player.y > this.cameraYMin + this.h + this.h / 2)
+    gameOverText.visible = true;
+
   //if (player.y > this.cameraYMin + this.h && player.alive) {
 
   // if (player.y > this.cameraYMin + this.h + 300) {
-  if (player.y > this.cameraYMin + 2 * this.h) {
+  if (
+    player.y > this.cameraYMin + 2 * this.h ||
+    (gameOverText.visible && player.body.touching.down)
+  ) {
     //physics.pause();
 
     this.scene.start();
   }
-
-  if (player.y > this.cameraYMin + this.h + this.h / 2)
-    gameOverText.visible = true;
 
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);
 

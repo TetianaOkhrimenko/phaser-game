@@ -362,7 +362,8 @@ function update() {
     this.scene.start();
   }
 
-  if (player.y > this.cameraYMin + this.h) gameOverText.visible = true;
+  if (player.y > this.cameraYMin + this.h + this.h / 2)
+    gameOverText.visible = true;
 
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);
 

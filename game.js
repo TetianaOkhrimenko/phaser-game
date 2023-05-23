@@ -34,6 +34,7 @@ function preload() {
 
 let score = 0;
 let scoreText;
+let gameOverText;
 
 function create() {
   this.w = this.cameras.main.width;
@@ -226,12 +227,21 @@ function create() {
 
   //this.physics.add.collider(player, platforms);
 
-  scoreText = this.add.text(this.w / 2 + 250, 20, "Score: 0", {
-    fontSize: "26px",
-    fill: "#eee", //#000
+  scoreText = this.add.text(this.w / 2 + 200, 20, "Score: 0", {
+    fontFamily: "Oswald",
+    fontSize: "28px",
+    fill: "#eee", //#000,
   });
 
-  hud = this.add.container(0, 0, [scoreText]);
+  gameOverText = this.add.text(this.w / 2, this.h / 2, "GAME OVER", {
+    fontFamily: "Oswald",
+    fontSize: "42px",
+    fill: "#eee", //#000,
+  });
+  gameOverText.setOrigin(0.5);
+  gameOverText.visible = false;
+
+  hud = this.add.container(0, 0, [scoreText, gameOverText]);
   //lock it to the camera
   hud.setScrollFactor(0);
 
@@ -347,8 +357,12 @@ function update() {
 
   // if (player.y > this.cameraYMin + this.h + 300) {
   if (player.y > this.cameraYMin + 2 * this.h) {
+    //physics.pause();
+
     this.scene.start();
   }
+
+  if (player.y > this.cameraYMin + this.h) gameOverText.visible = true;
 
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);
 

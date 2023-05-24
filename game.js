@@ -138,7 +138,7 @@ function create() {
   for (let i = 1; i < 51; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
-      Phaser.Math.RND.between(20, this.w - 20),
+      Phaser.Math.RND.between(100, this.w - 100),
       this.cameraYMin - 90 * i
     );
 
@@ -167,6 +167,7 @@ function create() {
   platforms.create(550, 250);*/
 
   let length = platforms.getChildren().length;
+  let platformsAll = platforms.getChildren();
   console.log(length);
 
   for (const platform of platforms.getChildren()) {
@@ -410,7 +411,7 @@ function update() {
   movingPlatforms.getChildren().forEach(function (platform) {
     //check if it's time for them to turn around
 
-    /* if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
+    /*if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
       switchDirection(platform);
     }*/
 

@@ -100,6 +100,8 @@ function create() {
     defaultKey: "ground",
   });
 
+  //platforms.createMultiple({ quantity: 10 });
+
   movingPlatforms = this.physics.add.group({
     defaultKey: "platform",
   });
@@ -133,18 +135,19 @@ function create() {
 
   //platforms.create(i * 100 + 100, i * 100 + 200);
 
-  for (let i = 1; i < 50; i++) {
+  for (let i = 1; i < 51; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
       Phaser.Math.RND.between(20, this.w - 20),
       this.cameraYMin - 90 * i
     );
+
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
 
   // platform basic setup
 
-  for (let i = 1; i < 30; i++) {
+  for (let i = 1; i < 31; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     movingPlatforms.create(
       Phaser.Math.RND.between(20, this.w - 100),
@@ -162,6 +165,9 @@ function create() {
   platforms.create(800, 320);
   platforms.create(600, 150);
   platforms.create(550, 250);*/
+
+  let length = platforms.getChildren().length;
+  console.log(length);
 
   for (const platform of platforms.getChildren()) {
     platform.body.immovable = true;
@@ -231,11 +237,22 @@ function create() {
 
   //this.physics.add.collider(player, platforms);
 
-  scoreText = this.add.text(this.w / 2 + 200, 20, "Score: 0", {
+  scoreText = this.add.text(this.w / 2 + 250, 20, "Score: 0", {
     fontFamily: "Oswald",
     fontSize: "28px",
     fill: "#eee", //#000,
   });
+
+  numberOfPlatformsText = this.add.text(
+    this.w / 2 + 50,
+    20,
+    `Platforms: ${length}`,
+    {
+      fontFamily: "Oswald",
+      fontSize: "28px",
+      fill: "#eee", //#000,
+    }
+  );
 
   gameOverText = this.add.text(this.w / 2, this.h / 2, "GAME OVER", {
     fontFamily: "Oswald",
@@ -245,7 +262,11 @@ function create() {
   gameOverText.setOrigin(0.5);
   gameOverText.visible = false;
 
-  hud = this.add.container(0, 0, [scoreText, gameOverText]);
+  hud = this.add.container(0, 0, [
+    scoreText,
+    gameOverText,
+    numberOfPlatformsText,
+  ]);
   //lock it to the camera
   hud.setScrollFactor(0);
 
@@ -355,8 +376,10 @@ function update() {
   //  this.scene.start();
   //}
 
-  if (player.y > this.cameraYMin + this.h + this.h / 2)
+  if (player.y > this.cameraYMin + this.h + this.h / 2) {
     gameOverText.visible = true;
+    //this.cameras.main.shake(500);
+  }
 
   //if (player.y > this.cameraYMin + this.h && player.alive) {
 
@@ -367,7 +390,19 @@ function update() {
   ) {
     //physics.pause();
 
-    this.scene.start();
+    //this.cameras.main.fade(250);
+    // this.cameras.main.shake(500);
+
+    this.time.delayedCall(
+      1000,
+      function () {
+        this.scene.restart();
+      },
+      [],
+      this
+    );
+
+    // this.scene.start();
   }
 
   //this.physics.add.collider(player, platforms, touchPlatform, null, this);

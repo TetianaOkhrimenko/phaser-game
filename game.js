@@ -35,6 +35,7 @@ function preload() {
 let score = 0;
 let scoreText;
 let gameOverText;
+let lastPlatformPosition;
 
 function create() {
   this.w = this.cameras.main.width;
@@ -274,9 +275,14 @@ function create() {
   //scoreText.fixedToCamera = true;
 
   this.physics.add.collider(player, platforms, (player, platform) => {
-    if (player.body.touching.down && platform.body.touching.up) {
+    if (
+      player.body.touching.down &&
+      platform.body.touching.up &&
+      lastPlatformPosition !== platform.y
+    ) {
       score += 1;
       scoreText.setText("Score: " + score);
+      lastPlatformPosition = platform.y;
     }
     //platform.body.moves = true;
     //platform.body.checkCollision.none = true;

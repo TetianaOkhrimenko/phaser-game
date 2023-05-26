@@ -136,7 +136,7 @@ function create() {
 
   //platforms.create(i * 100 + 100, i * 100 + 200);
 
-  for (let i = 1; i < 51; i++) {
+  for (let i = 1; i < 9; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
       Phaser.Math.RND.between(100, this.w - 100),
@@ -275,11 +275,6 @@ function create() {
   //scoreText.fixedToCamera = true;
 
   this.physics.add.collider(player, platforms, (player, platform) => {
-    /* if (player.body.touching.down && platform.body.touching.up) {
-      score += 1;
-      scoreText.setText("Score: " + score);
-    }*/
-
     if (
       player.body.touching.down &&
       platform.body.touching.up &&
@@ -289,7 +284,6 @@ function create() {
       scoreText.setText("Score: " + score);
       lastPlatformPosition = platform.y;
     }
-
     //platform.body.moves = true;
     //platform.body.checkCollision.none = true;
     //scoreText.fixedToCamera = true;
@@ -298,8 +292,8 @@ function create() {
 
   this.physics.add.collider(player, movingPlatforms, (player, platform) => {
     if (player.body.touching.down && platform.body.touching.up) {
-      //score += 1;
-      //scoreText.setText("Score: " + score);
+      score += 1;
+      scoreText.setText("Score: " + score);
       player.setVelocity(-100, 0);
       //player.body.immovable = true;
     }
@@ -410,7 +404,6 @@ function update() {
       1000,
       function () {
         this.scene.restart();
-        score = 0;
       },
       [],
       this
@@ -437,17 +430,25 @@ function update() {
 
   platforms.getChildren().forEach(function (platform) {
     this.platformYMin = Math.min(this.platformYMin, platform.y);
+
+    if (platform.y > this.cameras.y + this.h + 300) {
+      platform.y = this.platformYMin - 100;
+    }
+  }, this);
+
+  movingPlatforms.getChildren().forEach(function (platform) {
+    // this.platformYMin = Math.min(this.platformYMin, platform.y);
     if (platform.y > this.cameras.y + this.h + 300) {
       platform.destroy();
     }
   }, this);
 
-  movingPlatforms.getChildren().forEach(function (platform) {
-    this.platformYMin = Math.min(this.platformYMin, platform.y);
-    if (platform.y > this.cameras.y + this.h + 300) {
-      platform.destroy();
-    }
-  }, this);
+  // if (platforms.getChildren().length < 2) {
+  //   platforms.create(
+  //     Phaser.Math.RND.between(100, this.w - 100),
+  //     this.platformYMin - 90
+  //   );
+  // }
 }
 
 function switchDirection(platform) {

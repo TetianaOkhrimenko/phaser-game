@@ -35,6 +35,7 @@ function preload() {
 let score = 0;
 let scoreText;
 let gameOverText;
+let lastPlatformPosition;
 
 function create() {
   this.w = this.cameras.main.width;
@@ -274,10 +275,21 @@ function create() {
   //scoreText.fixedToCamera = true;
 
   this.physics.add.collider(player, platforms, (player, platform) => {
-    if (player.body.touching.down && platform.body.touching.up) {
+    /* if (player.body.touching.down && platform.body.touching.up) {
       score += 1;
       scoreText.setText("Score: " + score);
+    }*/
+
+    if (
+      player.body.touching.down &&
+      platform.body.touching.up &&
+      lastPlatformPosition !== platform.y
+    ) {
+      score += 1;
+      scoreText.setText("Score: " + score);
+      lastPlatformPosition = platform.y;
     }
+
     //platform.body.moves = true;
     //platform.body.checkCollision.none = true;
     //scoreText.fixedToCamera = true;
@@ -286,8 +298,8 @@ function create() {
 
   this.physics.add.collider(player, movingPlatforms, (player, platform) => {
     if (player.body.touching.down && platform.body.touching.up) {
-      score += 1;
-      scoreText.setText("Score: " + score);
+      //score += 1;
+      //scoreText.setText("Score: " + score);
       player.setVelocity(-100, 0);
       //player.body.immovable = true;
     }
@@ -398,6 +410,7 @@ function update() {
       1000,
       function () {
         this.scene.restart();
+        score = 0;
       },
       [],
       this

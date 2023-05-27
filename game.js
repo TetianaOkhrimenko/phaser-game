@@ -24,18 +24,22 @@ function preload() {
   //game.scale.pageAlignVertically = true;
   //game.stage.backgroundColor = "#bbe4e9";
 
-  this.load.image("background", "assets/nebula.jpg");
+  // this.load.image("background", "assets/nebula.jpg");
+  this.load.image("background", "assets/dream_clouds4.png");
   //this.load.image("background", "assets/background.png");
   this.load.image("block", "assets/platform4.png");
   this.load.image("ground", "assets/platform4.png");
   this.load.image("platform", "assets/platform5.png");
   this.load.image("doggo", "assets/orange-cat1.png");
+  this.load.image("apple", "assets/apple.png");
 }
 
 let score = 0;
 let scoreText;
 let gameOverText;
 let lastPlatformPosition;
+let isPlayerFly = false;
+let isPlyaerColidePlatform = false;
 
 function create() {
   this.w = this.cameras.main.width;
@@ -45,6 +49,7 @@ function create() {
   const worldHeight = 99999;
   this.cameraYMin = 99999;
   this.platformYMin = 99999;
+  this.appleYMin = 99999;
 
   /*let bg = this.add.image(this.w / 2, this.h / 2, "background");
 
@@ -101,6 +106,10 @@ function create() {
     defaultKey: "ground",
   });
 
+  apples = this.physics.add.group({
+    defaultKey: "apple",
+  });
+
   //platforms.createMultiple({ quantity: 10 });
 
   movingPlatforms = this.physics.add.group({
@@ -136,7 +145,7 @@ function create() {
 
   //platforms.create(i * 100 + 100, i * 100 + 200);
 
-  for (let i = 1; i < 51; i++) {
+  for (let i = 1; i < 9; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     platforms.create(
       Phaser.Math.RND.between(100, this.w - 100),
@@ -148,11 +157,12 @@ function create() {
 
   // platform basic setup
 
-  for (let i = 1; i < 31; i++) {
+  for (let i = 1; i < 9; i++) {
     //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
     movingPlatforms.create(
       Phaser.Math.RND.between(20, this.w - 100),
-      worldHeight - 150 * i
+      //worldHeight - 150 * i
+      this.cameraYMin - 150 * i
     );
     //platforms.create(i * 100 + 100, i * 100 + 200);
   }
@@ -171,11 +181,28 @@ function create() {
   let platformsAll = platforms.getChildren();
   console.log(length);
 
-  for (const platform of platforms.getChildren()) {
+  /*for (const platform of platforms.getChildren()) {
     platform.body.immovable = true;
     platform.body.moves = false;
     platform.body.velocity.x = 100;
-  }
+
+    for (let i = 1; i < 6; i++) {
+      //platforms.create(Phaser.Math.RND.between(0, this.w - 50), this.h - 100 * i);
+      apples.create(platform.x, platform.y - 40);
+    }
+  }*/
+
+  platforms.getChildren().forEach(function (platform, index) {
+    platform.body.immovable = true;
+    platform.body.moves = false;
+    platform.body.velocity.x = 100;
+
+    for (let i = 1; i < 6; i++) {
+      if (index % 3 === 0 && index !== 0) {
+        apples.create(platform.x, platform.y - 40);
+      }
+    }
+  }, this);
 
   for (const platform of movingPlatforms.getChildren()) {
     platform.body.immovable = true;
@@ -195,6 +222,11 @@ function create() {
     /*if (Math.abs(platform.x - platform.previousX) >= platform.maxDistance) {
       switchDirection(platform);
     }*/
+  }
+
+  for (const apple of apples.getChildren()) {
+    apple.body.immovable = true;
+    apple.body.moves = false;
   }
 
   /* movingPlatforms.children.iterate((child) => {
@@ -245,16 +277,17 @@ function create() {
     fill: "#eee", //#000,
   });
 
-  numberOfPlatformsText = this.add.text(
-    this.w / 2 + 50,
-    20,
-    `Platforms: ${length}`,
-    {
-      fontFamily: "Oswald",
-      fontSize: "28px",
-      fill: "#eee", //#000,
-    }
-  );
+  goal = this.add.text(this.w / 2 + 50, 20, `Goal: 100`, {
+    fontFamily: "Oswald",
+    fontSize: "28px",
+    fill: "#eee", //#000,
+  });
+
+  messageText = this.add.text(this.w / 2, this.h / 2, "PRESS UP TO FLY", {
+    fontFamily: "Oswald",
+    fontSize: "42px",
+    fill: "#eee", //#000,
+  });
 
   gameOverText = this.add.text(this.w / 2, this.h / 2, "GAME OVER", {
     fontFamily: "Oswald",
@@ -263,42 +296,45 @@ function create() {
   });
   gameOverText.setOrigin(0.5);
   gameOverText.visible = false;
+  messageText.setOrigin(0.5);
+  messageText.visible = false;
 
-  hud = this.add.container(0, 0, [
-    scoreText,
-    gameOverText,
-    numberOfPlatformsText,
-  ]);
+  hud = this.add.container(0, 0, [scoreText, gameOverText, goal, messageText]);
   //lock it to the camera
   hud.setScrollFactor(0);
 
   //scoreText.fixedToCamera = true;
 
-  this.physics.add.collider(player, platforms, (player, platform) => {
-    /* if (player.body.touching.down && platform.body.touching.up) {
+  const colliderPlatform = this.physics.add.collider(
+    player,
+    platforms,
+    (player, platform) => {
+      /* if (player.body.touching.down && platform.body.touching.up) {
       score += 1;
       scoreText.setText("Score: " + score);
     }*/
 
-    if (
-      player.body.touching.down &&
-      platform.body.touching.up &&
-      lastPlatformPosition !== platform.y
-    ) {
-      score += 1;
-      scoreText.setText("Score: " + score);
-      lastPlatformPosition = platform.y;
-    }
+      if (
+        player.body.touching.down &&
+        platform.body.touching.up &&
+        lastPlatformPosition !== platform.y
+      ) {
+        score += 1;
+        scoreText.setText("Score: " + score);
+        lastPlatformPosition = platform.y;
+      }
 
-    //platform.body.moves = true;
-    //platform.body.checkCollision.none = true;
-    //scoreText.fixedToCamera = true;
-    //player.body.checkWorldBounds();
-  });
+      //platform.body.moves = true;
+      //platform.body.checkCollision.none = true;
+      //scoreText.fixedToCamera = true;
+      //player.body.checkWorldBounds();
+    }
+  );
 
   this.physics.add.collider(player, movingPlatforms, (player, platform) => {
+    isPlyaerColidePlatform = true;
     if (player.body.touching.down && platform.body.touching.up) {
-      //score += 1;
+      // score += 1;
       //scoreText.setText("Score: " + score);
       player.setVelocity(-100, 0);
       //player.body.immovable = true;
@@ -316,6 +352,11 @@ function create() {
 
   this.physics.add.collider(platforms, movingPlatforms);
 
+  this.physics.add.overlap(player, apples, (player, apple) => {
+    apple.destroy();
+    isPlayerFly = true;
+  });
+
   //this.physics.add.collider(player, platforms, (player, platform) => {
   //platform.body.moves = true;
   // platform.body.checkCollision.none = true;
@@ -330,6 +371,23 @@ function touchPlatform() {
 }
 
 function update() {
+  if (cursors.up.isDown && isPlayerFly) {
+    player.setVelocityY(-500);
+    messageText.visible = true;
+    //this.physics.world.removeCollider(this.colliderPlatform);
+    // isPlyaerColidePlatform = false;
+    //player.body.touching = false;
+    this.time.delayedCall(
+      5000,
+      function () {
+        isPlayerFly = false;
+        messageText.visible = false;
+      },
+      [],
+      this
+    );
+  }
+
   // if (this.physics.collider(this.player, this.platforms)) {
   //  touchPlatform();
   //}
@@ -337,9 +395,9 @@ function update() {
   const cam = this.cameras.main;
 
   this.cameraYMin = Math.min(this.cameraYMin, player.y - this.h + 130);
+  this.cameras.y = this.cameraYMin;
   console.log("cameraYMin:", this.cameraYMin);
   console.log("player.y:", player.y);
-  this.cameras.y = this.cameraYMin;
   console.log("cameras.y:", this.cameras.y);
 
   //this.backgr.setTilePosition(scrollX, scrollY);
@@ -410,7 +468,7 @@ function update() {
       1000,
       function () {
         this.scene.restart();
-        score = 0;
+        //score = 0;
       },
       [],
       this
@@ -435,17 +493,25 @@ function update() {
     }
   }, this);
 
-  platforms.getChildren().forEach(function (platform) {
+  platforms.getChildren().forEach(function (platform, index) {
     this.platformYMin = Math.min(this.platformYMin, platform.y);
     if (platform.y > this.cameras.y + this.h + 300) {
-      platform.destroy();
+      //platform.destroy();
+      platform.y = this.platformYMin - 100;
     }
+
+    apples.getChildren().forEach(function (apple, i) {
+      if (apple.y > this.cameraYMin + this.h + 300) {
+        apple.y = this.platformYMin - 100;
+      }
+    });
   }, this);
 
   movingPlatforms.getChildren().forEach(function (platform) {
-    this.platformYMin = Math.min(this.platformYMin, platform.y);
+    //this.platformYMin = Math.min(this.platformYMin, platform.y);
     if (platform.y > this.cameras.y + this.h + 300) {
-      platform.destroy();
+      //platform.destroy();
+      platform.y = this.platformYMin - 100;
     }
   }, this);
 }
